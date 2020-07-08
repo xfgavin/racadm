@@ -1,14 +1,12 @@
-FROM ubuntu:bionic
+FROM centos
 
-RUN apt-get -qq update \
-    && apt-get install -y --force-yes gpg \
-    && echo 'deb http://linux.dell.com/repo/community/openmanage/932/bionic bionic main' > /etc/apt/sources.list.d/linux.dell.com.sources.list \
-    && gpg --recv-key 1285491434D8786F \
-    && gpg -a --export 1285491434D8786F | apt-key add - \
-    && apt-get -qq update \
-    && apt-get -qq install -y --force-yes srvadmin-idracadm8 \
-    && apt-get -qq purge gpg \
-    && apt-get -qq autoremove \
-    && apt-get -qq clean \
-    && apt-get -qq autoclean \
+RUN yum -y update \
+ && yum -y install openssl pciutils wget \
+ && wget -O /tmp/pkg.tgz https://dl.dell.com/FOLDER05920767M/1/DellEMC-iDRACTools-Web-LX-9.4.0-3732_A00.tar.gz \
+ && tar -C /tmp -xf /tmp/pkg.tgz \
+ && cd /tmp/iDRACTools/racadm/RHEL8/x86_64 \
+ && rpm -i *.rpm \
+ && ln -s `ls /usr/lib64/libssl.so.*|head -n1` /usr/lib64/libssl.so \
+ && rm -rf /tmp/* \
+ && yum -y clean all
 ENTRYPOINT ["/opt/dell/srvadmin/sbin/racadm"]
