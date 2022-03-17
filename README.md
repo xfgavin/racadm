@@ -1,6 +1,6 @@
 # racadm
 
-Dell EMC iDRAC Tools for Linux, v9.4.0 in a centos docker container.
+Latest Dell EMC iDRAC Tools for Linux in a centos8 docker container.
 
 Usage:
 
